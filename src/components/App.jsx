@@ -24,6 +24,8 @@ function Display({ data, onBoxClick }) {
 
 function App() {
   const [pokeData, setPokeData] = useState([]);
+  const [highScore, setHighScore] = useState(0);
+  const [score, setScore] = useState(0);
 
   useEffect(() => {
     if (!didInit) {
@@ -69,20 +71,40 @@ function App() {
   }
 
   function handleBoxClick(e) {
-    console.log(e.target.id);
     const itemToMarkClicked = pokeData.find(item => item.number == e.target.id);
-    itemToMarkClicked.clicked = true;
-    
     const newPokeData = [ ...pokeData.filter(item => item.number != e.target.id), itemToMarkClicked ];
+
+    if (!itemToMarkClicked.clicked) {
+      itemToMarkClicked.clicked = true;
+      setScore(score + 1);
+    } else {
+      newPokeData.map(item => item.clicked = false);
+      setHighScore(score);
+      setScore(0);
+    }
+
     shuffleArray(newPokeData);
     setPokeData(newPokeData);
   }
 
-  return (
-    <>
-      <Display data={pokeData} onBoxClick={handleBoxClick} />
-    </>
-  );
+  if (score < 12) {
+    return (
+      <>
+        <p>High Score: {highScore}</p>
+        <p>Score: {score}</p>
+        <Display data={pokeData} onBoxClick={handleBoxClick} />
+      </>
+    );
+  } else {
+    return (
+      <>
+        <p>High Score: {highScore}</p>
+        <p>Score: {score}</p>
+        <h2>You won!</h2>
+        <Display data={pokeData} />
+      </>
+    );
+  }
 }
 
 export { App };
