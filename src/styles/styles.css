@@ -36,7 +36,7 @@ p, h3 {
 
 .container {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(6, 1fr);
     grid-auto-rows: minmax(50px, auto);
     column-gap: 10px;
     row-gap: 10px;
@@ -55,11 +55,22 @@ p, h3 {
     border: none;
 }
 
+.img {
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+}
+
 .box {
     background-color: snow;
     border: thick double slateblue;
     border-radius: 10px;
     padding: 0px 10px 10px;
+}
+
+.box:hover {
+    background-color: peachpuff;
+    color: maroon;
 }
 
 .button {
