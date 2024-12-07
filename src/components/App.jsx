@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react';
 import '../styles/styles.css';
 
-let didInit = false;
-
 function Box({ details, onBoxClick }){
   return (
     <div id={details.number} className="box" onClick={onBoxClick}>
@@ -22,17 +20,35 @@ function Display({ data, onBoxClick }) {
   );
 }
 
+function Render({ score, pokeData, handleBoxClick, handleRestart }) {
+  if (score < 12) {
+    return (
+      <Display data={pokeData} onBoxClick={handleBoxClick} />
+    );
+  } else {
+    return (
+      <>
+        <h2>You won!</h2>
+        <button className="button" onClick={handleRestart}>Restart</button>
+        <Display data={pokeData} />
+      </>
+    );
+  }
+  
+}
+
 function App() {
   const [pokeData, setPokeData] = useState([]);
   const [highScore, setHighScore] = useState(0);
   const [score, setScore] = useState(0);
+  const [attempts, setAttempts] = useState(0);
+  const [ended, setEnded] = useState(false);
 
   useEffect(() => {
-    if (!didInit) {
+    if (!ended) {
       const pokeNum = [];
       const pokeSelected = [];
       let count = 0;
-      didInit = true;
 
       while (count < 12) {
         const num = Math.ceil(Math.random() * 151);
@@ -60,8 +76,10 @@ function App() {
             }
           });
       })
+
+      setEnded(true);
     }
-  }, []);
+  }, [ ended ]);
 
   function shuffleArray(arr) { // https://javascript.info/task/shuffle
     for (let i = arr.length - 1; i > 0; i--) {
@@ -81,30 +99,30 @@ function App() {
       newPokeData.map(item => item.clicked = false);
       setHighScore(score);
       setScore(0);
+      setAttempts(attempts + 1);
     }
 
     shuffleArray(newPokeData);
     setPokeData(newPokeData);
   }
 
-  if (score < 12) {
-    return (
-      <>
-        <p>High Score: {highScore}</p>
-        <p>Score: {score}</p>
-        <Display data={pokeData} onBoxClick={handleBoxClick} />
-      </>
-    );
-  } else {
-    return (
-      <>
-        <p>High Score: {highScore}</p>
-        <p>Score: {score}</p>
-        <h2>You won!</h2>
-        <Display data={pokeData} />
-      </>
-    );
+  function handleRestart() {
+    setHighScore(0);
+    setScore(0);
+    setAttempts(0);
+    setEnded(false);
   }
+
+  return (
+    <>
+      <div className="scores">
+        <p>High Score: {highScore}</p>
+        <p><strong>Score: {score}</strong></p>
+        <p>Attempts: {attempts}</p>
+      </div>
+      <Render score={score} pokeData={pokeData} handleBoxClick={handleBoxClick} handleRestart={handleRestart} />
+    </>
+  );
 }
 
 export { App };
