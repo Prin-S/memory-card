@@ -34,6 +34,12 @@ p, h3 {
     margin: 5px 0;
 }
 
+@media (max-width: 992px) {
+    .pokename {
+        font-size: 0.9em;
+    }
+}
+
 .container {
     display: grid;
     grid-template-columns: repeat(6, 1fr);

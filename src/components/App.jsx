@@ -5,7 +5,7 @@ function Box({ details, onBoxClick }){
   return (
     <div id={details.number} className="box" onClick={onBoxClick}>
       <div><img id={details.number} className="img" src={details.pic} alt={details.name} /></div>
-      <p id={details.number}>{details.name}</p>
+      <p className="pokename" id={details.number}>{details.name}</p>
     </div>
   );
 }
